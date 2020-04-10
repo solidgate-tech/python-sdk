@@ -14,9 +14,9 @@ Use pip command: ```pip install solidgate-card-sdk```
 
 Create a class instance of the 'ApiClient' class.
 ```
-from solidgate-card-sdk import api_client
+from api_client import ApiClient
 
-client = api_client.ApiClient(merchant_id, private_key)
+client = ApiClient(merchant_id, private_key)
 ```
 - merchant_id - unique merchant identification;
 - private_key - secret code for request signature. It's provided at the moment of merchant registration.
