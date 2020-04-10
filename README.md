@@ -1,3 +1,5 @@
+[![PyPI version](https://badge.fury.io/py/solidgate-card-sdk.svg)](https://badge.fury.io/py/solidgate-card-sdk)
+
 # SolidGate API
 This library provides basic API options of SolidGate payment gateway.
 
