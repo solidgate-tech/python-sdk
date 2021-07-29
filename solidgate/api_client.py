@@ -7,6 +7,9 @@ from typing import Generator
 
 import requests
 
+from solidgate.encryption import AESCipher
+from solidgate.model import MerchantData
+
 
 class ApiClient:
     BASE_SOLID_GATE_API_URI = 'https://pay.solidgate.com/api/v1/'
@@ -62,6 +65,12 @@ class ApiClient:
     def google_pay(self, attributes: dict) -> requests.models.Response:
         return self.__send_solidgate_request('google-pay', attributes)
 
+    def form_merchant_data(self, attributes: dict) -> MerchantData:
+        payment_intent = AESCipher(self.__private_key).encrypt(self.__convert_request_attributes_to_str(attributes))
+        signature = self.__generate_signature(payment_intent)
+        merchant_data = MerchantData(payment_intent=payment_intent, merchant=self.__merchant_id, signature=signature)
+        return merchant_data
+
     def order_reconciliation(self, date_from: datetime, date_to: datetime) -> Generator:
         return self.__send_reconciliation_request(self.RECONCILIATION_ORDERS_PATH, date_from, date_to)
 
@@ -69,7 +78,6 @@ class ApiClient:
         return self.__send_reconciliation_request(self.RECONCILIATION_CHARGEBACKS_PATH, date_from, date_to)
 
     def __generate_signature(self, data: str) -> str:
-
         encrypto_data = (self.__merchant_id + data + self.__merchant_id).encode('utf-8')
         sign = hmac.new(self.__private_key.encode('utf-8'), encrypto_data, hashlib.sha512).hexdigest()
         return base64.b64encode(sign.encode('utf-8')).decode('utf-8')
@@ -100,9 +108,13 @@ class ApiClient:
                 raise Exception('Request is not successful!')
 
     def __send_request(self, path: str, attributes: dict) -> requests.models.Response:
-        body = json.dumps(attributes)
+        body = self.__convert_request_attributes_to_str(attributes)
         headers = {'Content-Type': 'application/json',
                    'Accept': 'application/json',
                    'Merchant': self.__merchant_id,
                    'Signature': self.__generate_signature(body)}
         return requests.post(path, headers=headers, json=attributes)
+
+    @staticmethod
+    def __convert_request_attributes_to_str(attributes: dict) -> str:
+        return json.dumps(attributes)

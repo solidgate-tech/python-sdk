@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="solidgate-card-sdk",
-    version="0.0.5",
+    version="0.1.0",
     author="SolidGate",
     author_email="info@solidgate.com",
     description="Python API SDK for SolidGate payment gateway",
@@ -18,5 +18,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    install_requires=['requests']
+    install_requires=['requests', 'pycryptodome']
 )
