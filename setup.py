@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="solidgate-card-sdk",
-    version="0.1.1",
+    version="0.1.2",
     author="SolidGate",
     author_email="info@solidgate.com",
     description="Python API SDK for SolidGate payment gateway",
