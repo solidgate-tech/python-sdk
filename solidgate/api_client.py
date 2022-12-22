@@ -29,9 +29,6 @@ class ApiClient:
         self.__base_solid_gate_api_uri = base_solid_gate_api_uri
         self.__base_reconciliations_api_uri = base_reconciliations_api_uri
 
-    def init_payment(self, attributes: dict) -> requests.models.Response:
-        return self.__send_solidgate_request('init-payment', attributes)
-
     def charge(self, attributes: dict) -> requests.models.Response:
         return self.__send_solidgate_request('charge', attributes)
 
