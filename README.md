@@ -25,7 +25,7 @@ client = ApiClient(public_key, secret_key)
 - secret_key - secret code for request signature. It's provided at the moment of merchant registration.
 
 ## Documentation
-* https://dev.solidgate.com
+* https://docs.solidgate.com
 
 ## Support
 If you have any problems, questions or suggestions send your inquiry to info@solidgate.com.

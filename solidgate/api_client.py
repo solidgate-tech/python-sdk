@@ -62,11 +62,17 @@ class ApiClient:
     def google_pay(self, attributes: dict) -> requests.models.Response:
         return self.__send_solidgate_request('google-pay', attributes)
 
-    def form_merchant_data(self, attributes: dict) -> MerchantData:
+    def form_merchant_data(self, attributes: dict) -> FormInitDTO:
         payment_intent = AESCipher(self.__private_key).encrypt(self.__convert_request_attributes_to_str(attributes))
         signature = self.__generate_signature(payment_intent)
-        merchant_data = MerchantData(payment_intent=payment_intent, merchant=self.__merchant_id, signature=signature)
-        return merchant_data
+        form_init_dto = FormInitDTO(payment_intent=payment_intent, publicKey=self.__merchant_id, signature=signature)
+        return form_init_dto
+
+    def form_update(self, attributes: dict) -> FormUpdateDTO:
+        partial_intent = AESCipher(self.__private_key).encrypt(self.__convert_request_attributes_to_str(attributes))
+        signature = self.__generate_signature(partial_intent)
+        form_update_dto = FormUpdateDTO(partial_intent=partial_intent, signature=signature)
+        return form_update_dto
 
     def order_reconciliation(self, date_from: datetime, date_to: datetime) -> Generator:
         return self.__send_reconciliation_request(self.RECONCILIATION_ORDERS_PATH, date_from, date_to)
