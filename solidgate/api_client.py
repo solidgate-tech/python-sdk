@@ -8,7 +8,7 @@ from typing import Generator
 import requests
 
 from solidgate.encryption import AESCipher
-from solidgate.model import MerchantData
+from solidgate.model import FormInitDTO, FormUpdateDTO
 
 
 class ApiClient:

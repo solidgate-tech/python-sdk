@@ -4,7 +4,7 @@ class FormInitDTO:
         self.merchant = publicKey
         self.signature = signature
 
-class FormInitDTO:
+class FormUpdateDTO:
     def __init__(self, partial_intent: str, signature: str):
         self.partial_intent = partial_intent
         self.signature = signature
