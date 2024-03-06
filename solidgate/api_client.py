@@ -75,9 +75,9 @@ class ApiClient:
         return form_update_dto
 
     def form_resign(self, attributes: dict) -> FormInitDTO:
-        payment_intent = AESCipher(self.__private_key).encrypt(self.__convert_request_attributes_to_str(attributes))
+        resign_intent = AESCipher(self.__private_key).encrypt(self.__convert_request_attributes_to_str(attributes))
         signature = self.__generate_signature(payment_intent)
-        form_resign_dto = FormResignDTO(payment_intent=payment_intent, publicKey=self.__merchant_id, signature=signature)
+        form_resign_dto = FormResignDTO(resign_intent=resign_intent, publicKey=self.__merchant_id, signature=signature)
         return form_resign_dto
 
     def order_reconciliation(self, date_from: datetime, date_to: datetime) -> Generator:

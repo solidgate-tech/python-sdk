@@ -10,7 +10,7 @@ class FormUpdateDTO:
         self.signature = signature
 
 class FormResignDTO:
-    def __init__(self, payment_intent: str, publicKey: str, signature: str):
-        self.payment_intent = payment_intent
+    def __init__(self, resignIntent: str, publicKey: str, signature: str):
+        self.resign_intent = resignIntent
         self.merchant = publicKey
         self.signature = signature
