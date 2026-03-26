@@ -76,7 +76,7 @@ class ApiClient:
 
     def form_resign(self, attributes: dict) -> FormInitDTO:
         resign_intent = AESCipher(self.__private_key).encrypt(self.__convert_request_attributes_to_str(attributes))
-        signature = self.__generate_signature(payment_intent)
+        signature = self.__generate_signature(resign_intent)
         form_resign_dto = FormResignDTO(resign_intent=resign_intent, publicKey=self.__merchant_id, signature=signature)
         return form_resign_dto
 
