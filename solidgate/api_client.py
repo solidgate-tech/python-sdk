@@ -2,13 +2,14 @@ import base64
 import hashlib
 import hmac
 import json
+import time
 from datetime import datetime
 from typing import Generator
 
 import requests
 
 from solidgate.encryption import AESCipher
-from solidgate.model import MerchantData
+from solidgate.model import FormInitDTO, FormUpdateDTO, FormResignDTO
 
 
 class ApiClient:
@@ -19,6 +20,12 @@ class ApiClient:
     RECONCILIATION_CHARGEBACKS_PATH = 'api/v2/reconciliation/chargebacks'
 
     RECONCILIATION_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+
+    DEFAULT_RETRY_DELAY = 5
+    MAX_ATTEMPTS = 5
+    RETRYABLE_STATUS_CODES = (429, 503)
+
+    USER_AGENT = 'Python-SDK-0.4.0'
 
     def __init__(self, merchant_id: str,
                  private_key: str,
@@ -120,9 +127,14 @@ class ApiClient:
         body = self.__convert_request_attributes_to_str(attributes)
         headers = {'Content-Type': 'application/json',
                    'Accept': 'application/json',
+                   'User-Agent': self.USER_AGENT,
                    'Merchant': self.__merchant_id,
                    'Signature': self.__generate_signature(body)}
-        return requests.post(path, headers=headers, json=attributes)
+        for attempt in range(1, self.MAX_ATTEMPTS + 1):
+            response = requests.post(path, headers=headers, json=attributes)
+            if response.status_code not in self.RETRYABLE_STATUS_CODES or attempt == self.MAX_ATTEMPTS:
+                return response
+            time.sleep(self.DEFAULT_RETRY_DELAY)
 
     @staticmethod
     def __convert_request_attributes_to_str(attributes: dict) -> str:
