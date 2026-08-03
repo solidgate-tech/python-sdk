@@ -60,7 +60,7 @@ To start using the Python SDK:
 1. Ensure you have your public and secret key.
 2. Install the SDK in your project using pip:
    ```bash
-   pip install solidgate-card-sdk
+   pip install solidgate-sdk
    ```
 3. Import the classes into your project:
     ```
